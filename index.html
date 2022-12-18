@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js" defer></script>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Fira+Sans:ital,wght@0,400;0,500;0,900;1,200;1,400;1,800;1,900&family=Libre+Baskerville:wght@400;700&family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Library</title>
+  </head>
+  <body>
+    <header>
+      <h1>LIBRARY</h1>
+      <div class="search">
+        <input type="search" name="search" id="search" />
+        <ion-icon name="search-outline"></ion-icon>
+      </div>
+    </header>
+    <nav></nav>
+    <main>
+      <div class="main-header">
+        <div class="add-book">
+          <ion-icon name="add-circle"></ion-icon>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <!-- <div class="card">
+          <h3>This is a Book</h3>
+        </div> -->
+      </div>
+    </main>
+    <footer>
+      <!-- <textarea
+        id="logs"
+        name="logs"
+        id=""
+        cols="30"
+        rows="10"
+        readonly
+      ></textarea> -->
+    </footer>
+
+    <div class="add-book-menu hide">
+      <ion-icon name="close-outline" id="close-btn"></ion-icon>
+      <form
+        action=""
+        onsubmit="addBookToLibrary(event)"
+        aria-errormessage="Invalid Form"
+      >
+        <label for="title">Book Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          aria-errormessage="Invalid Title name"
+        />
+        <label for="author">Author</label>
+        <input
+          type="text"
+          name="author"
+          id="author"
+          aria-errormessage="Invalid Author name"
+        />
+        <label for="pages">Number of Pages</label>
+        <input
+          type="number"
+          name="pages"
+          id="pages"
+          aria-errormessage="Invalid number of pages"
+        />
+        <label for="read-book">
+          <input type="checkbox" name="read-book" id="read-book" />
+          <span>I've read the book</span>
+        </label>
+
+        <!-- <input type="checkbox" name="read" id="read-choice" /> -->
+        <div class="submit">
+          <span id="error-wrapper"></span>
+          <input type="submit" value="ADD" disabled />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

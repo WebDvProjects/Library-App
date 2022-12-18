@@ -1,0 +1,353 @@
+:root {
+  --add-menu-width: 275px;
+
+  /* COLOR PALETTE */
+  --color-1: rgb(243, 239, 224);
+  --color-2: rgb(67, 66, 66);
+  --color-3: rgb(34, 34, 34);
+  --color-4: rgb(34, 163, 159);
+
+  --theme-color: var(--color-4);
+  --body-bg-color: var(--color-2);
+  --card-bg-color: var(--color-1);
+  --add-menu-bg-color: var(--color-3);
+  --sidebar-bg-color: var(--color-3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--body-bg-color);
+  color: white;
+
+  margin: 0;
+
+  height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+
+  z-index: 0;
+  position: relative;
+}
+
+header {
+  grid-area: header;
+  background-color: var(--theme-color);
+  padding: 10px 20px;
+}
+
+main {
+  grid-area: main;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(max(135px, 15%), 1fr));
+  grid-template-rows: auto;
+  padding: 20px;
+  gap: 20px;
+}
+
+.card {
+  background: var(--card-bg-color);
+  border-radius: 10px;
+  padding: 15px;
+  font-family: "Raleway";
+  box-shadow: 0 0.2rem 0.4rem -0.14rem black;
+
+  color: var(--color-3);
+  opacity: 0.7;
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.card ion-icon {
+  color: var(--theme-color);
+  font-size: 1.2rem;
+  --ionicon-stroke-width: 40px;
+}
+
+.add-book {
+  display: flex;
+  justify-content: center;
+}
+
+.add-book ion-icon {
+  color: var(--theme-color);
+  font-size: 4.5rem;
+  cursor: pointer;
+
+  transition: transform 0.1s ease-in;
+  position: relative;
+  filter: drop-shadow(0 0 0.75rem var(--color-3));
+
+  /* border: 5px solid white; */
+  /* border-radius: 50%; */
+}
+
+.add-book ion-icon::before {
+  content: "";
+  position: absolute;
+  background-color: black;
+
+  /* Center */
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+
+  /* Move behind */
+  z-index: -1;
+}
+
+ion-icon:hover {
+  transform: scale(1.1);
+  /* box-shadow: ; */
+}
+
+nav {
+  grid-area: sidebar;
+}
+
+footer {
+  grid-area: footer;
+}
+
+p {
+  font-family: "Libre Baskerville";
+}
+h1 {
+  font-family: "Fira Sans";
+  /* font-style: italic; */
+}
+
+.hide {
+  display: None;
+}
+.add-book-menu {
+  position: absolute;
+  padding: 30px;
+
+  min-width: min-content;
+  width: var(--add-menu-width);
+
+  background-color: rgb(26, 24, 24, 1);
+  border-radius: 10px;
+  box-shadow: 0 0 0.5rem black;
+  /* color: black; */
+  border: 1px var(--theme-color) solid;
+  border-top: 25px solid var(--theme-color);
+
+  top: 25%;
+  /* center's absolute elements along the horizontal-axis */
+  left: calc(50% - calc(var(--add-menu-width) / 2));
+
+  z-index: 1;
+
+  /* transform: scale(0);
+  opacity: 0; */
+  /* transition: opacity 0.2s ease, transform 0.3s ease; */
+  animation: 0.2s ease-in forwards popup;
+  /* backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px); */
+}
+
+@keyframes popup {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+#close-btn {
+  font-size: 1.45rem;
+  position: absolute;
+  top: -23px;
+  right: 3px;
+  --ionicon-stroke-width: 30px;
+  cursor: pointer;
+}
+
+#close-btn:hover {
+  --ionicon-stroke-width: 60px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+input {
+  appearance: none;
+  -webkit-appearance: none;
+
+  margin: 0;
+  padding: 0;
+
+  display: block;
+}
+
+.add-book-menu input:not([type="checkbox"]) {
+  width: 100%;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:is([type="text"], [type="number"]) {
+  padding-left: 10px;
+}
+
+form span {
+  position: relative;
+  display: block;
+}
+
+.submit {
+  padding-top: 20px;
+  position: relative;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+  background-color: var(--theme-color);
+  color: white;
+  position: relative;
+}
+
+input[type="submit"]:hover {
+  opacity: 0.8;
+}
+
+input[type="submit"]:active {
+  opacity: 0.95;
+  top: 1px;
+}
+
+form > .submit > span#error-wrapper {
+  color: red;
+  font-size: 0.815rem;
+  font-weight: 100;
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: block;
+
+  /* z-index: 3; */
+}
+
+[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  filter: blur(1px);
+}
+
+/* Search bar */
+.search {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  border-radius: 17px;
+  border: 2px solid black;
+  width: max-content;
+  padding: 0 10px;
+  background-color: var(--color-1);
+}
+
+.search > :nth-child(1n) {
+  display: inline-block;
+}
+
+.search input[type="search"] {
+  background-color: transparent;
+  width: clamp(100px, 92%, 300px);
+  height: 40px;
+  border: 0px;
+  font-size: 1.2rem;
+}
+
+.search ion-icon {
+  color: var(--theme-color);
+  font-size: 2rem;
+  --ionicon-stroke-width: 60px;
+  cursor: pointer;
+}
+
+label[for="read-book"] {
+  display: flex;
+  gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+#read-book {
+  width: 18px;
+  height: 18px;
+  border: 1px solid;
+  border-radius: 50%;
+  background-color: var(--color-1);
+  cursor: inherit;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  background-color: var(--theme-color);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+/* if raiobutton is checked (the checkbox) */
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+[aria-invalid="true"] {
+  border: red solid 2px !important;
+  /* -moz-outline-radius: inherit; */
+}
+
+[aria-invalid="false"] {
+  border: var(--theme-color) solid 2px !important;
+}
+
+:disabled {
+  opacity: 0.4;
+  cursor: auto;
+  transform: none;
+  user-select: none;
+  pointer-events: none;
+}
