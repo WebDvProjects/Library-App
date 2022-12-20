@@ -3,7 +3,7 @@ const body = document.querySelector("body");
 const header = document.querySelector("header");
 const main = document.querySelector("main");
 const footer = document.querySelector("footer");
-const booksDisplayArea = document.querySelector(".main-content");
+const booksDisplayArea = document.querySelector(".card-area");
 
 // Menu Elements + Menu-form elements
 const addBookMenu = document.querySelector(".add-book-menu");
@@ -15,7 +15,7 @@ const readBook = document.getElementById("add-read-book");
 const addBookError = document.getElementById("error-wrapper");
 
 // buttons
-const addBtn = document.querySelector('main ion-icon[name="add-circle"]');
+const addBtn = document.querySelector('.main-header ion-icon[name="add-circle"]');
 const addBookMenuCloseBnt = document.getElementById("close-btn");
 const addBookBtn = document.querySelector(':is([type="submit"],[value="ADD"])');
 
