@@ -1,5 +1,6 @@
 :root {
   --add-menu-width: 275px;
+  --card-width: 250px;
 
   /* COLOR PALETTE */
   --color-1: rgb(243, 239, 224);
@@ -48,14 +49,19 @@ main {
 }
 
 .main-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(max(135px, 15%), 1fr));
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(max(var(--card-width, 175px), 17.5%), 1fr));
   grid-template-rows: auto;
+
   padding: 20px;
   gap: 20px;
 }
 
 .card {
+
+  flex: 0 0 auto;
+
+
   background: var(--card-bg-color);
   border-radius: 10px;
   padding: 15px;
@@ -64,19 +70,118 @@ main {
 
   color: var(--color-3);
   opacity: 0.7;
-  transition: transform 0.2s ease-in, opacity 0.2s ease-in-out;
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in-out, width 0.2s, flex 0.5s;
+
+
   cursor: pointer;
+
+
 }
 
 .card:hover {
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
   opacity: 1;
+
 }
+
+.card.selected{
+  /* transform: scale(1.05); */
+  opacity: 1;
+
+}
+
+.card.card.selected :is(p, span, h3){
+  white-space: initial;
+  overflow: auto;
+  text-overflow: unset;
+}
+
+.card :is(p, span, h3){
+  word-break: break-word;
+  /* Both of the following's needed for text-overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card p{
+  margin: 0;
+  font-size: 0.875rem;
+
+}
+
+.card > :nth-child(n):not(:nth-last-child(1)){
+  margin-bottom:15px;
+}
+
+
+
+.card .book-pages{
+  font-size: 0.815rem;
+}
+
+.card input[type="checkbox"]{
+  /* border: 2px solid var(--color-3); */
+  height: 1.2rem;
+  /* width: 2.4rem; */
+  aspect-ratio: 2/1;
+  border-radius: 15px;
+  position: relative;
+
+  cursor: pointer;
+
+  background-color: var(--color-2);
+  /* transform-box: content-box; */
+}
+
+.card input[type="checkbox"]::before{
+  --x-offset:5%;
+  content: '';
+  position: absolute;
+  background-color: var(--color-1);
+  top: 10%;
+  left: var(--x-offset);
+  height: 80%;
+  aspect-ratio: 1;
+  /* height: calc(1.2rem * 0.8);
+  width: calc(1.2rem * 0.8); */
+  border-radius: 50%;
+  /* border: 1px solid; */
+
+  transition: transform 0.2s ease-in-out;
+  /* transform-box: inherit; */
+}
+
+.card input[type="checkbox"]:checked::before{
+  /* background-color: var(--theme-color); */
+  /* left: auto; */
+  /* left: var(--x-offset); */
+  transform: translateX(130%);
+}
+
+.card input[type="checkbox"]:checked{
+  background-color: var(--theme-color);
+}
+/* @supports not (aspect-ratio: 2/1){
+  .card input[type="checkbox"]{
+    height: 1.2rem;
+    width: 2.4rem;
+  }
+}
+
+@supports not (aspect-ratio: 1){
+  .card input[type="checkbox"]::before{
+    height: calc(1.2rem * 0.8);
+    width: calc(1.2rem * 0.8);
+  }
+} */
+
 
 .card ion-icon {
   color: var(--theme-color);
   font-size: 1.2rem;
   --ionicon-stroke-width: 40px;
+  display: block;
 }
 
 .add-book {
@@ -91,7 +196,7 @@ main {
 
   transition: transform 0.1s ease-in;
   position: relative;
-  filter: drop-shadow(0 0 0.75rem var(--color-3));
+  filter: drop-shadow(0 0 0.75rem rgb(52, 50, 50));
 
   /* border: 5px solid white; */
   /* border-radius: 50%; */
@@ -301,14 +406,14 @@ form > .submit > span#error-wrapper {
   cursor: pointer;
 }
 
-label[for="read-book"] {
+label[for="add-read-book"] {
   display: flex;
   gap: 10px;
   position: relative;
   cursor: pointer;
 }
 
-#read-book {
+#add-read-book {
   width: 18px;
   height: 18px;
   border: 1px solid;
@@ -317,7 +422,7 @@ label[for="read-book"] {
   cursor: inherit;
 }
 
-input[type="checkbox"]::before {
+input[type="checkbox"]#add-read-book::before {
   content: "";
   position: absolute;
   background-color: var(--theme-color);
@@ -331,7 +436,7 @@ input[type="checkbox"]::before {
 }
 
 /* if raiobutton is checked (the checkbox) */
-input[type="checkbox"]:checked::before {
+input[type="checkbox"]#add-read-book:checked::before {
   transform: scale(1);
 }
 

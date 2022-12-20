@@ -11,7 +11,7 @@ const addBookForm = document.querySelector("form");
 const addBookTitle = document.getElementById("title");
 const addBookAuthor = document.getElementById("author");
 const addBookPages = document.getElementById("pages");
-const readBook = document.getElementById("read-book");
+const readBook = document.getElementById("add-read-book");
 const addBookError = document.getElementById("error-wrapper");
 
 // buttons
@@ -24,6 +24,7 @@ const addBookBtn = document.querySelector(':is([type="submit"],[value="ADD"])');
 
 /* VARIABLES and OBJECTS */
 let menuIsActive = false;
+let cardActive = false; // if any card is actively selected
 
 // Object that stores books each book is stored with a unique id
 const library = {
@@ -90,12 +91,17 @@ function displayBooks() {
     const bookCard = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const bookSummary = document.createElement("p");
+    const bookPages = document.createElement('p');
+    const bookRead = document.createElement('input');
     const removeIcon = document.createElement("ion-icon");
     // assign card class to bookCard
     bookCard.classList.add("card");
+    bookCard.onclick = (e) => toggleSelectCard(e);
+
     // add an attribute that references the index position of the book in library
     bookCard.setAttribute("book_id", `${book_id}`);
     bookTitle.textContent = book.title;
+    bookTitle.classList.add('book-title');
 
     // add attributes to remove button
     removeIcon.setAttribute("name", "trash-outline");
@@ -103,11 +109,20 @@ function displayBooks() {
     removeIcon.onclick = () => removeBookFromLibrary(book_id);
 
     // todo: book summary
-
-    // todo: book read
-
+    bookSummary.textContent = `Written by ${book.author}`
+    bookSummary.classList.add('book-author');
+    bookPages.textContent = `${book.pages} pages.`;
+    bookPages.classList.add('book-pages');
+    // todo: update book read
+    bookRead.setAttribute('type', 'checkbox');
+    bookRead.setAttribute('name', 'update-book-read');
+    bookRead.setAttribute('id', 'update-book-read');
+    bookRead.checked = book.read;
+    bookRead.onclick = () => toggleBookIsRead(book_id);
+  
     // add above elements to card (parent)
     bookCard.appendChild(bookTitle);
+    bookCard.append(bookSummary, bookPages, bookRead);
     bookCard.append(removeIcon);
     // add card to DOM content
     booksDisplayArea.appendChild(bookCard);
@@ -123,6 +138,33 @@ function updateBookDisplay() {
 
 function clearBookDisplay() {
   booksDisplayArea.innerHTML = "";
+}
+
+function toggleBookIsRead(book_id){
+  library[book_id].read = !library[book_id].read;
+}
+
+function toggleSelectCard(e){
+  const element = e.currentTarget;
+  console.log("check");
+  // unselect any selected cards
+  clearAllSelected();
+
+  // toggle selected on the now selected card
+  element.classList.add('selected');
+
+  cardActive = true;
+  e.stopPropagation();
+}
+
+function clearAllSelected(){
+  // unselected all cards
+  Array.from(document.getElementsByClassName('selected')).forEach(card => {
+    // remove selected class
+    card.classList.remove('selected');
+  });
+
+  cardActive = false;
 }
 
 /* 
@@ -141,9 +183,17 @@ addBookMenuCloseBnt.onclick = function () {
   // Close add book menu
   closeAddMenu();
 };
-// close add menu button when user clicks outside the add book menu
+/* close add menu button when user clicks outside the add book menu
+  Also unselected the selected cards if click event is not triggered
+  on any card
+*/
 body.onclick = (e) => {
-  // if no menu is active then ignore
+  // if no card is selected then unselect any cards
+  if(cardActive && !(e.target!=booksDisplayArea && booksDisplayArea.contains(e.target))){
+    clearAllSelected();
+  }
+
+  // if no menu is active then ignore the 
   if (!menuIsActive) return;
   // if current clicked target is the book menu or any of its children then ignore
   if (e.target === addBookMenu || addBookMenu.contains(e.target)) return;
