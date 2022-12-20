@@ -155,6 +155,9 @@ body.onclick = (e) => {
 addBookTitle.addEventListener("focusout", (e) => onInputChange(e.target));
 addBookAuthor.addEventListener("focusout", (e) => onInputChange(e.target));
 addBookPages.addEventListener("focusout", (e) => onInputChange(e.target));
+addBookTitle.addEventListener("input", (e) => onInputChange(e.target));
+addBookAuthor.addEventListener("input", (e) => onInputChange(e.target));
+addBookPages.addEventListener("input", (e) => onInputChange(e.target));
 
 /* 
 DISABLE SURROUNDING CONTENT WHEN ADD MENU IS ACTIVE
@@ -214,7 +217,7 @@ const allIsValid = () =>
   }, true);
 
 // called when input on a form element has changed
-function onInputChange(target) {
+function onInputChange(target, ) {
   // if error message is true then log the message
 
   //   return true if there is an error on the form
@@ -242,10 +245,10 @@ function onInputChange(target) {
   //   If we have to log the error and there is an error then log it
   if (hasError()) {
     logErrorMsg(target, true);
-    target.setAttribute("aria-invalid", "true");
+    toggleInvalid(target, true);
   } else {
     logErrorMsg(target);
-    target.setAttribute("aria-invalid", "false");
+    toggleInvalid(target, false);
   }
 
   /* Check if all inputfields are valid  
@@ -275,6 +278,10 @@ function logErrorMsg(target, isError) {
 // Clears the message output in the form
 function clearErrorMsg() {
   addBookError.textContent = "";
+}
+
+function toggleInvalid(target, status = true){
+  target.setAttribute("aria-invalid", status);
 }
 
 // Clears the error/invalid state of all form elements
