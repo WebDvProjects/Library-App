@@ -20,7 +20,7 @@ const addBookMenuCloseBnt = document.getElementById("close-btn");
 const addBookBtn = document.querySelector(':is([type="submit"],[value="ADD"])');
 
 // MISC/DEBUGGIN
-// const logs = document.getElementById("logs");
+const searchBar = document.getElementById('search');
 
 /* VARIABLES and OBJECTS */
 let menuIsActive = false;
@@ -35,12 +35,13 @@ const library = {
 let currentBookId = 1;
 
 // Object representation of a book
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, id = 0) {
   // Book details
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
+  this.id = id;
 }
 // shared method returning info/summary for each book
 Book.prototype.info = function () {
@@ -66,7 +67,8 @@ function addBookToLibrary(event) {
     addBookTitle.value,
     addBookAuthor.value,
     addBookPages.value,
-    readBook.checked
+    readBook.checked,
+    currentBookId
   );
   //   increment book id
   currentBookId++;
@@ -209,6 +211,8 @@ addBookTitle.addEventListener("input", (e) => onInputChange(e.target));
 addBookAuthor.addEventListener("input", (e) => onInputChange(e.target));
 addBookPages.addEventListener("input", (e) => onInputChange(e.target));
 
+searchBar.oninput = (e) => onInputChange(e.target);
+
 /* 
 DISABLE SURROUNDING CONTENT WHEN ADD MENU IS ACTIVE
 */
@@ -278,8 +282,12 @@ const allIsValid = () =>
   }, true);
 
 // called when input on a form element has changed
+// also handles search settings
 function onInputChange(target, ) {
-  // if error message is true then log the message
+  // if input type is search then perform the search operations
+  if (target.type === "search"){
+    search(target.value);
+  }
 
   //   return true if there is an error on the form
   let hasError = () => {
@@ -350,6 +358,47 @@ function clearInvalidStates() {
   [...addBookForm.children].forEach((element) =>
     element.removeAttribute("aria-invalid")
   );
+}
+
+
+/* SEARCH IMPLEMENTATION */
+// Search for any matchin authors or titles
+function search(input){
+  // if library is empty then don't bother searching
+  if (Object.values(library).length < 1) return;
+
+  // Regular expression for searching the given input text, case insensitive
+  let reg = new RegExp(input, "i")
+
+  // filter the books by the given regular expressions
+  let matches = Object.values(library).filter(book => {
+    // test the regex on both the book title and autho
+    return reg.test(book.title) || reg.test(book.author)
+});
+
+  displaySearchResults(matches);
+}
+
+function displaySearchResults(booksData){
+  // get the actual ids bound to the book objects in the library
+  const bookIds = new Set(booksData.map(book => `${book.id}`));
+  console.log(bookIds);
+  // all card elements in the page
+  let bookCards = document.querySelectorAll('.card-area > .card');
+  bookCards = [...bookCards];
+  
+  // loop through each card and check if its a valid search result
+  for (let i = 0; i < bookCards.length; i++) {
+    // if the id of book is within the search results id's then toggle display
+    if(bookIds.has(bookCards[i].getAttribute('book_id'))){
+      bookCards[i].classList.remove('hide');
+    }
+    // Otherwise hide the card
+    else{
+      bookCards[i].classList.add('hide');
+    }
+    
+  }
 }
 
 document.onload = displayBooks();
