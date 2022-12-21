@@ -21,6 +21,7 @@ const addBookBtn = document.querySelector(':is([type="submit"],[value="ADD"])');
 
 // MISC/DEBUGGIN
 const searchBar = document.getElementById('search');
+const messageDisplay = document.querySelector('.message-display');
 
 /* VARIABLES and OBJECTS */
 let menuIsActive = false;
@@ -87,6 +88,14 @@ function removeBookFromLibrary(book_id) {
 }
 
 function displayBooks() {
+  // if library is empty
+  if (Object.values(library) < 1){
+    messageDisplay.textContent = "LIBRARY IS EMPTY!";
+    return;
+  }else{
+    messageDisplay.textContent = "";
+  }
+
   // loop through the library
   for (const book_id in library) {
     const book = library[book_id];
@@ -131,6 +140,8 @@ function displayBooks() {
   }
 }
 
+
+/* Update the display to show current existing books in the library */
 function updateBookDisplay() {
   // Clear current display before update
   clearBookDisplay();
@@ -366,6 +377,7 @@ function clearInvalidStates() {
 function search(input){
   // if library is empty then don't bother searching
   if (Object.values(library).length < 1) return;
+  
 
   // Regular expression for searching the given input text, case insensitive
   let reg = new RegExp(input, "i")
@@ -380,9 +392,16 @@ function search(input){
 }
 
 function displaySearchResults(booksData){
+  if(booksData.length < 1){
+    // display message
+    messageDisplay.textContent = "BOOK NOT FOUND!";
+  }else{
+    messageDisplay.textContent = "";
+  }
+
   // get the actual ids bound to the book objects in the library
   const bookIds = new Set(booksData.map(book => `${book.id}`));
-  console.log(bookIds);
+
   // all card elements in the page
   let bookCards = document.querySelectorAll('.card-area > .card');
   bookCards = [...bookCards];
