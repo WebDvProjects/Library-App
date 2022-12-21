@@ -57,7 +57,7 @@ function addBookToLibrary(event) {
   //   If form is not valid then disable the submit button and do not create bok
   if (!allIsValid()) {
     addBookBtn.disabled = true;
-    logErrorMsg(event.currentTarget);
+    logErrorMsg(event.currentTarget, true);
     return;
   }
 
@@ -257,7 +257,18 @@ function closeAddMenu() {
   clearInvalidStates();
   clearErrorMsg();
   menuIsActive = false;
+
+  // also reset the object that stores the validity state of the form
+  formCurrentValidity = {
+    title: false,
+    author: false,
+    pages: false,
+  }
+
+  // 
+
   console.log("closing menu");
+
 }
 
 // check if all form elements are valid
