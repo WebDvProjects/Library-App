@@ -15,40 +15,44 @@ const readBook = document.getElementById("add-read-book");
 const addBookError = document.getElementById("error-wrapper");
 
 // buttons
-const addBtn = document.querySelector('.main-header ion-icon[name="add-circle"]');
+const addBtn = document.querySelector(
+  '.main-header ion-icon[name="add-circle"]'
+);
 const addBookMenuCloseBnt = document.getElementById("close-btn");
 const addBookBtn = document.querySelector(':is([type="submit"],[value="ADD"])');
 
 // MISC/DEBUGGIN
-const searchBar = document.getElementById('search');
-const messageDisplay = document.querySelector('.message-display');
+const searchBar = document.getElementById("search");
+const messageDisplay = document.querySelector(".message-display");
 
 /* VARIABLES and OBJECTS */
 let menuIsActive = false;
 let cardActive = false; // if any card is actively selected
 
-// Object that stores books each book is stored with a unique id
-const library = {
-  0: new Book("Harry Porter", "JK Rowling", 270, false),
-};
-
 // stores the id that the current book or book to be added holds
 let currentBookId = 1;
 
 // Object representation of a book
-function Book(title, author, pages, read, id = 0) {
-  // Book details
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.id = id;
+class Book {
+  constructor(title, author, pages, read, id = 0) {
+    // Book details
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.id = id;
+  }
+  // shared method returning info/summary for each book
+  info = () => {
+    return `${this.title} by ${this.author}, ${this.pages} pages, ${
+      this.read ? "already read" : "not read yet"
+    }`;
+  };
 }
-// shared method returning info/summary for each book
-Book.prototype.info = function () {
-  return `${this.title} by ${this.author}, ${this.pages} pages, ${
-    this.read ? "already read" : "not read yet"
-  }`;
+
+// Object that stores books each book is stored with a unique id
+const library = {
+  0: new Book("Harry Porter", "JK Rowling", 270, false),
 };
 
 // Creates a book from given info and adds it to the book list
@@ -89,10 +93,10 @@ function removeBookFromLibrary(book_id) {
 
 function displayBooks() {
   // if library is empty
-  if (Object.values(library) < 1){
+  if (Object.values(library) < 1) {
     messageDisplay.textContent = "LIBRARY IS EMPTY!";
     return;
-  }else{
+  } else {
     messageDisplay.textContent = "";
   }
 
@@ -102,8 +106,8 @@ function displayBooks() {
     const bookCard = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const bookSummary = document.createElement("p");
-    const bookPages = document.createElement('p');
-    const bookRead = document.createElement('input');
+    const bookPages = document.createElement("p");
+    const bookRead = document.createElement("input");
     const removeIcon = document.createElement("ion-icon");
     // assign card class to bookCard
     bookCard.classList.add("card");
@@ -112,7 +116,7 @@ function displayBooks() {
     // add an attribute that references the index position of the book in library
     bookCard.setAttribute("book_id", `${book_id}`);
     bookTitle.textContent = book.title;
-    bookTitle.classList.add('book-title');
+    bookTitle.classList.add("book-title");
 
     // add attributes to remove button
     removeIcon.setAttribute("name", "trash-outline");
@@ -120,17 +124,17 @@ function displayBooks() {
     removeIcon.onclick = () => removeBookFromLibrary(book_id);
 
     // todo: book summary
-    bookSummary.textContent = `Written by ${book.author}`
-    bookSummary.classList.add('book-author');
+    bookSummary.textContent = `Written by ${book.author}`;
+    bookSummary.classList.add("book-author");
     bookPages.textContent = `${book.pages} pages.`;
-    bookPages.classList.add('book-pages');
+    bookPages.classList.add("book-pages");
     // todo: update book read
-    bookRead.setAttribute('type', 'checkbox');
-    bookRead.setAttribute('name', 'update-book-read');
-    bookRead.setAttribute('id', 'update-book-read');
+    bookRead.setAttribute("type", "checkbox");
+    bookRead.setAttribute("name", "update-book-read");
+    bookRead.setAttribute("id", "update-book-read");
     bookRead.checked = book.read;
     bookRead.onclick = () => toggleBookIsRead(book_id);
-  
+
     // add above elements to card (parent)
     bookCard.appendChild(bookTitle);
     bookCard.append(bookSummary, bookPages, bookRead);
@@ -139,7 +143,6 @@ function displayBooks() {
     booksDisplayArea.appendChild(bookCard);
   }
 }
-
 
 /* Update the display to show current existing books in the library */
 function updateBookDisplay() {
@@ -153,28 +156,28 @@ function clearBookDisplay() {
   booksDisplayArea.innerHTML = "";
 }
 
-function toggleBookIsRead(book_id){
+function toggleBookIsRead(book_id) {
   library[book_id].read = !library[book_id].read;
 }
 
-function toggleSelectCard(e){
+function toggleSelectCard(e) {
   const element = e.currentTarget;
   console.log("check");
   // unselect any selected cards
   clearAllSelected();
 
   // toggle selected on the now selected card
-  element.classList.add('selected');
+  element.classList.add("selected");
 
   cardActive = true;
   e.stopPropagation();
 }
 
-function clearAllSelected(){
+function clearAllSelected() {
   // unselected all cards
-  Array.from(document.getElementsByClassName('selected')).forEach(card => {
+  Array.from(document.getElementsByClassName("selected")).forEach((card) => {
     // remove selected class
-    card.classList.remove('selected');
+    card.classList.remove("selected");
   });
 
   cardActive = false;
@@ -202,11 +205,14 @@ addBookMenuCloseBnt.onclick = function () {
 */
 body.onclick = (e) => {
   // if no card is selected then unselect any cards
-  if(cardActive && !(e.target!=booksDisplayArea && booksDisplayArea.contains(e.target))){
+  if (
+    cardActive &&
+    !(e.target != booksDisplayArea && booksDisplayArea.contains(e.target))
+  ) {
     clearAllSelected();
   }
 
-  // if no menu is active then ignore the 
+  // if no menu is active then ignore the
   if (!menuIsActive) return;
   // if current clicked target is the book menu or any of its children then ignore
   if (e.target === addBookMenu || addBookMenu.contains(e.target)) return;
@@ -278,12 +284,11 @@ function closeAddMenu() {
     title: false,
     author: false,
     pages: false,
-  }
+  };
 
-  // 
+  //
 
   console.log("closing menu");
-
 }
 
 // check if all form elements are valid
@@ -294,9 +299,9 @@ const allIsValid = () =>
 
 // called when input on a form element has changed
 // also handles search settings
-function onInputChange(target, ) {
+function onInputChange(target) {
   // if input type is search then perform the search operations
-  if (target.type === "search"){
+  if (target.type === "search") {
     search(target.value);
   }
 
@@ -360,7 +365,7 @@ function clearErrorMsg() {
   addBookError.textContent = "";
 }
 
-function toggleInvalid(target, status = true){
+function toggleInvalid(target, status = true) {
   target.setAttribute("aria-invalid", status);
 }
 
@@ -371,52 +376,49 @@ function clearInvalidStates() {
   );
 }
 
-
 /* SEARCH IMPLEMENTATION */
 // Search for any matchin authors or titles
-function search(input){
+function search(input) {
   // if library is empty then don't bother searching
   if (Object.values(library).length < 1) return;
-  
 
   // Regular expression for searching the given input text, case insensitive
-  let reg = new RegExp(input, "i")
+  let reg = new RegExp(input, "i");
 
   // filter the books by the given regular expressions
-  let matches = Object.values(library).filter(book => {
+  let matches = Object.values(library).filter((book) => {
     // test the regex on both the book title and autho
-    return reg.test(book.title) || reg.test(book.author)
-});
+    return reg.test(book.title) || reg.test(book.author);
+  });
 
   displaySearchResults(matches);
 }
 
-function displaySearchResults(booksData){
-  if(booksData.length < 1){
+function displaySearchResults(booksData) {
+  if (booksData.length < 1) {
     // display message
     messageDisplay.textContent = "BOOK NOT FOUND!";
-  }else{
+  } else {
     messageDisplay.textContent = "";
   }
 
   // get the actual ids bound to the book objects in the library
-  const bookIds = new Set(booksData.map(book => `${book.id}`));
+  const bookIds = new Set(booksData.map((book) => `${book.id}`));
 
   // all card elements in the page
-  let bookCards = document.querySelectorAll('.card-area > .card');
+  let bookCards = document.querySelectorAll(".card-area > .card");
   bookCards = [...bookCards];
-  
+
   // loop through each card and check if its a valid search result
   for (let i = 0; i < bookCards.length; i++) {
     // if the id of book is within the search results id's then toggle display
-    if(bookIds.has(bookCards[i].getAttribute('book_id'))){
-      bookCards[i].classList.remove('hide');
+    if (bookIds.has(bookCards[i].getAttribute("book_id"))) {
+      bookCards[i].classList.remove("hide");
     }
     // Otherwise hide the card
-    else{
-      bookCards[i].classList.add('hide');
+    else {
+      bookCards[i].classList.add("hide");
     }
-    
   }
 }
 
